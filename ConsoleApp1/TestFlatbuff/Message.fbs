@@ -1,0 +1,9 @@
+namespace Flatbuffers_Proto;
+
+table Message
+{
+    seq:int = 0;
+    msg:string;
+}
+
+root_type Message;

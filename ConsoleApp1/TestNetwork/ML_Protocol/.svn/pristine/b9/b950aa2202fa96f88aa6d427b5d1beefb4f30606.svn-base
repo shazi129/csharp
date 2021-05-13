@@ -1,0 +1,45 @@
+
+using LitJsonEx;
+using System.Collections.Generic;
+
+public enum EMLMsgType
+{
+    E_NONE,
+    E_START_GAME,
+    E_STEP_ACTION,
+    E_STEP_OBSERVATION,
+
+    TypeCount
+}
+
+
+public sealed class MLMessage : MLAIProtoBase
+{
+    public long lUin = 0;
+    public long lSeq = 0;
+    public EMLMsgType eMsgType = EMLMsgType.E_NONE;
+
+    public JsonData MsgContent = null;
+
+    public MLMessage()
+    {
+        MsgContent = new JsonData();
+        MsgContent.SetJsonType(JsonType.Object);
+    }
+
+    public override void ReadFrom(JsonData data)
+    {
+        lUin = ReadLong(data, "lUin", 0);
+        lSeq = ReadLong(data, "lSeq", 0);
+        eMsgType = (EMLMsgType)ReadIntInRange(data, "eMsgType", 0, (int)EMLMsgType.TypeCount - 1,   (int)EMLMsgType.E_NONE);
+        MsgContent = ReadObject(data, "MsgContent", null);
+    }
+
+    public override void WriteTo(JsonData data)
+    {
+        data["lUin"] = lUin;
+        data["lSeq"] = lSeq;
+        data["eMsgType"] = (int)eMsgType;
+        data["MsgContent"] = MsgContent;
+    }
+}
