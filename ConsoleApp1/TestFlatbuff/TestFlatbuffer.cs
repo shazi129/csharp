@@ -39,14 +39,16 @@ public class TestFlatbuffers
         while(true)
         {
             Console.WriteLine(" ‰»Î ˝æ›:");
-            string m = Console.ReadLine();
+            string msg = Console.ReadLine();
 
-            string msg = "dddd";
+            //string msg = "dddd";
 
             SendMsg(_clientSocket, msg, seq);
 
             Message rspMsg = RecvMsg(_clientSocket);
             Console.WriteLine("recv: " + rspMsg.Msg + ", seq:" + rspMsg.Seq);
+
+            seq++;
         }
     }
 
@@ -61,7 +63,7 @@ public class TestFlatbuffers
         var offset = Message.EndMessage(builder);
 
         builder.Finish(offset.Value);
-        byte[] b = builder.DataBuffer.ToFullArray();
+        byte[] b = builder.DataBuffer.ToSizedArray();
 
         socket.Send(b);
     }
